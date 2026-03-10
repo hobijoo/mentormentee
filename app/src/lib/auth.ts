@@ -7,7 +7,7 @@ export async function setSessionCookie(userId: number, role: string) {
     const encoded = Buffer.from(value).toString('base64');
     (await cookies()).set(SESSION_COOKIE_NAME, encoded, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: false, // Set to false to allow internal network HTTP connections (Safari/Edge drops true on HTTP)
         path: '/'
     });
 }
