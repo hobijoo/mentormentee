@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  jjakseon-app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: jjakseon-app
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount the database directory so SQLite data persists
+      - ./data/sqlite:/app/data
+      # Mount the photo uploads directory so images persist
+      - ./data/uploads:/app/public/uploads
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_PATH=/app/data/bingo.sqlite
