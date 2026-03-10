@@ -228,11 +228,11 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
     const bowlingOptions = ['볼링핀3', '볼링핀4', '볼링핀5'];
 
     return (
-        <div style={{ height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', width: '100%' }}>
+        <div style={{ position: 'fixed', top: 0, width: '100%', maxWidth: '430px', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', touchAction: 'none' }}>
             <div id="header" style={{ width: '100%', flexShrink: 0 }}>
-                <img src="/top.svg" alt="Header Banner" style={{ width: '100%', height: 'auto', display: 'block', transform: 'translateZ(0)' }} />
+                <img src="/top.png" alt="Header Banner" style={{ width: '100%', height: 'auto', display: 'block', transform: 'translateZ(0)' }} />
             </div>
-            <div id="bingo" style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: '20px' }}>
+            <div id="bingo" style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: 'env(safe-area-inset-bottom)', boxSizing: 'border-box' }}>
                 <div id="bingoHeader">
                     <div id="bingoMole"></div>
                     <div
@@ -291,8 +291,8 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
 
             {/* Upload Modal */}
             {selectedItemId !== null && selectedItemInfo && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', zIndex: 1000, boxSizing: 'border-box', backdropFilter: 'blur(2px)' }} onClick={(e) => { if (e.target === e.currentTarget) setSelectedItemId(null); }}>
-                    <div style={{ backgroundColor: 'white', padding: '24px 20px', borderTopLeftRadius: '24px', borderTopRightRadius: '24px', width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '15px', maxHeight: '90vh', overflowY: 'auto', animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100dvh', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', zIndex: 1000, boxSizing: 'border-box', backdropFilter: 'blur(2px)' }} onClick={(e) => { if (e.target === e.currentTarget) setSelectedItemId(null); }}>
+                    <div style={{ touchAction: 'pan-y', backgroundColor: 'white', padding: '24px 20px', paddingBottom: 'calc(24px + env(safe-area-inset-bottom))', borderTopLeftRadius: '24px', borderTopRightRadius: '24px', width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '15px', maxHeight: '90dvh', overflowY: 'auto', animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
                         <div style={{ width: '40px', height: '5px', backgroundColor: '#e0e0e0', borderRadius: '3px', margin: '-10px auto 10px auto' }} />
                         <h2 style={{ fontSize: '20px', fontWeight: '900', margin: 0, color: '#1B2A68' }} dangerouslySetInnerHTML={{ __html: selectedItemInfo.text.replace(/<br>/g, ' ') }} />
                         <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>기본 점수: {selectedItemInfo.score}점</p>
@@ -372,8 +372,8 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
 
             {/* Score History Modal */}
             {showHistory && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', zIndex: 1000, boxSizing: 'border-box', backdropFilter: 'blur(2px)' }} onClick={(e) => { if (e.target === e.currentTarget) setShowHistory(false); }}>
-                    <div style={{ backgroundColor: 'white', padding: '24px 20px', borderTopLeftRadius: '24px', borderTopRightRadius: '24px', width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '15px', maxHeight: '90vh', overflowY: 'auto', animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100dvh', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', zIndex: 1000, boxSizing: 'border-box', backdropFilter: 'blur(2px)' }} onClick={(e) => { if (e.target === e.currentTarget) setShowHistory(false); }}>
+                    <div style={{ touchAction: 'pan-y', backgroundColor: 'white', padding: '24px 20px', paddingBottom: 'calc(24px + env(safe-area-inset-bottom))', borderTopLeftRadius: '24px', borderTopRightRadius: '24px', width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '15px', maxHeight: '90dvh', overflowY: 'auto', animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
                         <div style={{ width: '40px', height: '5px', backgroundColor: '#e0e0e0', borderRadius: '3px', margin: '-10px auto 10px auto' }} />
                         <h2 style={{ fontSize: '20px', fontWeight: '900', margin: 0, color: '#1B2A68' }}>점수 내역</h2>
 
@@ -411,7 +411,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
             {/* Bingo Completion Animation Overlay */}
             {showBingoAnimation > 0 && (
                 <div style={{
-                    position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                    position: 'fixed', top: 0, left: 0, width: '100vw', height: '100dvh',
                     pointerEvents: 'none', zIndex: 9999, display: 'flex',
                     justifyContent: 'center', alignItems: 'center',
                     flexDirection: 'column',

@@ -19,7 +19,7 @@ export default function RootLayout({
         <link href="https://cdn.jsdelivr.net/gh/sun-typeface/SUITE@2/fonts/static/woff2/SUITE.css" rel="stylesheet" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
       </head>
-      <body style={{ backgroundColor: '#20317E', margin: 0, padding: 0, display: 'flex', justifyContent: 'center', minHeight: '100vh', fontWeight: 700 }}>
+      <body style={{ backgroundColor: '#20317E', margin: 0, padding: 0, display: 'flex', justifyContent: 'center', minHeight: '100dvh', fontWeight: 700 }}>
         <MobileGuard>
           {children}
         </MobileGuard>

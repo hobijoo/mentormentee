@@ -29,9 +29,9 @@ export default function Login() {
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100dvh', backgroundColor: '#20317E', color: 'white', overflow: 'hidden' }}>
+        <div style={{ position: 'fixed', top: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '430px', height: '100dvh', backgroundColor: '#20317E', color: 'white', overflow: 'hidden', touchAction: 'none' }}>
             <div id="header" style={{ width: '100%', flexShrink: 0 }}>
-                <img src="/top.svg" alt="Header Logo" style={{ width: '100%', height: 'auto', display: 'block', transform: 'translateZ(0)' }} />
+                <img src="/top.png" alt="Header Logo" style={{ width: '100%', height: 'auto', display: 'block', transform: 'translateZ(0)' }} />
             </div>
 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '0 20px', position: 'relative' }}>
