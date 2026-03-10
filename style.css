@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #20317E;
+}
+
+@font-face {
+    font-family: 'Paperozi';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-9Black.woff2') format('woff2');
+    font-weight: 900;
+    font-display: swap;
+}
+
+.holtwood-one-sc-regular {
+    font-family: "Holtwood One SC", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#header {
+    margin-top: 0;
+    background-image: url(./top.svg);
+    background-size: 100vw 60vw;
+    background-position: center;
+    width: 100vw;
+    height: calc(100vw / 612 * 279)
+}
+
+#bingo {
+    width: 100vw;
+}
+
+#bingoHeader {
+    width: fit-content;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    gap: 10px;
+}
+
+#bingoMole {
+    background-image: url(mole.svg);
+    background-size: 85.7px 66px;
+    background-position: center;
+    width: 85.7px;
+    height: 66px;
+}
+
+#bingoScore {
+    width: fit-content;
+    height: 38px;
+    font-size: 20px;
+    background-color: #F1B329;
+    border-radius: 38px;
+    margin: none;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    border: 5px white solid;
+}
+
+#bingoBoard {
+    width: calc(100vw - 20px);
+    height: calc(100vw - 20px);
+    padding: 0 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.bingoBoardItem {
+    font-family: 'Paperozi';
+    background-color: #EEE9E7;
+    border-radius: 7%;
+    color: black;
+    font-size: 18px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
