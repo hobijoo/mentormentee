@@ -70,18 +70,20 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    gap: 10px;
+    gap: 8px;
 }
 
 .bingoBoardItem {
     font-family: 'Paperozi';
     background-color: #EEE9E7;
+    border: white 5px solid;
     border-radius: 7%;
-    color: black;
+    color: #1B2A68;
     font-size: 18px;
     font-weight: 900;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    flex-direction: column;
 }

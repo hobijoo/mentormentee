@@ -1,6 +1,43 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+
+function AutoFitText({ html }: { html: string }) {
+    const textRef = useRef<HTMLSpanElement>(null);
+
+    useEffect(() => {
+        const el = textRef.current;
+        if (!el || !el.parentElement) return;
+
+        // Reset to original before measuring again in case of resize
+        el.style.fontSize = '18px';
+
+        const parent = el.parentElement;
+        // Assume padding is 10px around, so subtract 20px from dimensions
+        const pWidth = parent.clientWidth - 20;
+        const pHeight = parent.clientHeight - 20;
+
+        let fontSize = 18;
+        while ((el.scrollHeight > pHeight || el.scrollWidth > pWidth) && fontSize > 10) {
+            fontSize--;
+            el.style.fontSize = `${fontSize}px`;
+        }
+    }, [html]);
+
+    return (
+        <span
+            ref={textRef}
+            dangerouslySetInnerHTML={{ __html: html }}
+            style={{
+                display: 'inline-block',
+                wordBreak: 'keep-all',
+                lineHeight: '1.2',
+                fontSize: '18px',
+                textAlign: 'center'
+            }}
+        />
+    );
+}
 import { BINGO_ITEMS, calculateLines, getLineBonus } from '@/lib/constants';
 import { useRouter } from 'next/navigation';
 
@@ -191,10 +228,11 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
     const bowlingOptions = ['볼링핀3', '볼링핀4', '볼링핀5'];
 
     return (
-        <>
-            <div id="header">
+        <div style={{ height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <div id="header" style={{ width: '100%', flexShrink: 0 }}>
+                <img src="/top.svg" alt="Header Banner" style={{ width: '100%', height: 'auto', display: 'block', transform: 'translateZ(0)' }} />
             </div>
-            <div id="bingo">
+            <div id="bingo" style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: '20px' }}>
                 <div id="bingoHeader">
                     <div id="bingoMole"></div>
                     <div
@@ -226,7 +264,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
                                 }}
                             >
                                 {!hasPhoto && (
-                                    <span dangerouslySetInnerHTML={{ __html: item.text }} />
+                                    <AutoFitText html={item.text} />
                                 )}
                                 {hasPhoto && !isMaxed && (
                                     <div style={{ backgroundColor: 'rgba(255,255,255,0.8)', padding: '2px 5px', borderRadius: '5px', fontSize: '12px', color: 'black', fontWeight: 'bold' }}>
@@ -411,6 +449,6 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

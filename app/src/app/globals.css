@@ -49,11 +49,12 @@ input[type="file"]::file-selector-button:hover {
 
 #header {
     margin-top: 0;
-    background-image: url('/top.svg');
-    background-size: cover;
-    background-position: center;
     width: 100%;
-    aspect-ratio: 612 / 279;
+}
+
+body {
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 #bingo {
@@ -100,6 +101,7 @@ input[type="file"]::file-selector-button:hover {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
     gap: 8px;
+    flex-shrink: 0;
 }
 
 .bingoBoardItem {
