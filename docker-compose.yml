@@ -9,12 +9,15 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      # Mount the database directory so SQLite data persists
-      - ./data/sqlite:/app/data
-      # Mount the photo uploads directory so images persist
-      - ./data/uploads:/app/public/uploads
+      # Use Docker named volumes instead of bind mounts to avoid HAOS read-only errors
+      - jjakseon-db:/app/data
+      - jjakseon-uploads:/app/public/uploads
     restart: always
     environment:
       - NODE_ENV=production
       - PORT=3000
       - DB_PATH=/app/data/bingo.sqlite
+
+volumes:
+  jjakseon-db:
+  jjakseon-uploads:
