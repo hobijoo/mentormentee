@@ -1,0 +1,21 @@
+{
+  "name": "2026 짝선짝후 빙고",
+  "short_name": "짝선짝후",
+  "description": "건축학과 2026학년도 짝선짝후 빙고 앱",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#20317E",
+  "theme_color": "#20317E",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

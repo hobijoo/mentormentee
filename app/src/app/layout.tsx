@@ -5,6 +5,13 @@ import MobileGuard from './MobileGuard';
 export const metadata: Metadata = {
   title: '2026 짝선짝후',
   description: '2026 짝선짝후 빙고',
+  manifest: '/manifest.json',
+  themeColor: '#20317E',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: '짝선짝후'
+  }
 };
 
 export default function RootLayout({
@@ -16,6 +23,7 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
         <link href="https://cdn.jsdelivr.net/gh/sun-typeface/SUITE@2/fonts/static/woff2/SUITE.css" rel="stylesheet" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
       </head>

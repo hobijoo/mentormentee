@@ -22,6 +22,11 @@ export default function MobileGuard({ children }: { children: React.ReactNode })
 
         checkMobile();
         window.addEventListener('resize', checkMobile);
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(err => console.error(err));
+        }
+
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 

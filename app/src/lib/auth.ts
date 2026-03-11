@@ -8,7 +8,8 @@ export async function setSessionCookie(userId: number, role: string) {
     (await cookies()).set(SESSION_COOKIE_NAME, encoded, {
         httpOnly: true,
         secure: false, // Set to false to allow internal network HTTP connections (Safari/Edge drops true on HTTP)
-        path: '/'
+        path: '/',
+        maxAge: 60 * 60 * 24 * 365 // 1 year auto-login
     });
 }
 
