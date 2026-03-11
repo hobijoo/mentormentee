@@ -17,7 +17,7 @@ async function saveFile(file: File, userId: number, itemId: number, suffix: stri
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     await fs.writeFile(filePath, buffer);
-    return `/uploads/${filename}`;
+    return `/api/file/${filename}`;
 }
 
 export async function POST(req: Request) {

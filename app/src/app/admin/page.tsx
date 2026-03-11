@@ -62,8 +62,13 @@ export default async function AdminDashboard() {
                                     let opts: { id: string, photoUrl: string }[] = [];
                                     try {
                                         const parsed = JSON.parse(u.options || '[]');
-                                        opts = parsed.map((o: any) => typeof o === 'string' ? { id: o, photoUrl: '' } : o);
+                                        opts = parsed.map((o: any) => ({
+                                            id: typeof o === 'string' ? o : o.id,
+                                            photoUrl: o.photoUrl ? o.photoUrl.replace('/uploads/', '/api/file/') : ''
+                                        }));
                                     } catch (e) { }
+
+                                    const mainPhotoUrl = u.photo_url ? u.photo_url.replace('/uploads/', '/api/file/') : '';
 
                                     return (
                                         <div key={u.item_index} style={{ backgroundColor: '#fff', borderBottom: '1px solid #f0f0f0', paddingBottom: '12px', marginBottom: '8px' }}>
@@ -73,7 +78,7 @@ export default async function AdminDashboard() {
                                                 <div
                                                     style={{
                                                         width: '64px', height: '64px',
-                                                        backgroundImage: `url(${u.photo_url})`,
+                                                        backgroundImage: `url(${mainPhotoUrl})`,
                                                         backgroundSize: 'cover', backgroundPosition: 'center',
                                                         borderRadius: '14px', border: '1px solid #e5e5ea',
                                                         marginRight: '16px', flexShrink: 0

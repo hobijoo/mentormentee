@@ -26,11 +26,14 @@ export default async function Home() {
     let opt = [];
     try {
       const parsed = JSON.parse(row.options || '[]');
-      opt = parsed.map((o: any) => typeof o === 'string' ? { id: o, photoUrl: '' } : o);
+      opt = parsed.map((o: any) => ({
+          id: typeof o === 'string' ? o : o.id,
+          photoUrl: o.photoUrl ? o.photoUrl.replace('/uploads/', '/api/file/') : ''
+      }));
     } catch (e) { }
 
     initialUploads[row.item_index] = {
-      photoUrl: row.photo_url,
+      photoUrl: row.photo_url ? row.photo_url.replace('/uploads/', '/api/file/') : '',
       options: opt,
       scoreAwarded: row.score_awarded
     };

@@ -55,6 +55,14 @@ input[type="file"]::file-selector-button:hover {
 body {
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+img {
+    -webkit-user-drag: none;
+    pointer-events: none;
 }
 
 #bingo {
