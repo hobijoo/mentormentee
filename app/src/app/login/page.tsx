@@ -29,72 +29,73 @@ export default function Login() {
     };
 
     return (
-        <div style={{ position: 'fixed', top: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '430px', height: '100dvh', backgroundColor: '#20317E', color: 'white', overflow: 'hidden', touchAction: 'none' }}>
+        <div style={{ position: 'fixed', top: 0, display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '430px', margin: '0 auto', height: '100dvh', backgroundColor: '#20317E', color: 'white', overflow: 'hidden', touchAction: 'none' }}>
+            <style>{`
+                .login-input::placeholder {
+                    color: black;
+                    opacity: 1;
+                }
+            `}</style>
             <div id="header" style={{ width: '100%', flexShrink: 0 }}>
-                <img src="/top.png" alt="Header Logo" style={{ width: '100%', height: 'auto', display: 'block', transform: 'translateZ(0)' }} />
+                <img src="/top.png" alt="Header Logo" style={{ width: '100%', height: 'auto', display: 'block', transform: 'translateZ(0)', pointerEvents: 'none' }} />
             </div>
 
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '0 20px', position: 'relative' }}>
-                <div style={{
-                    position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)',
-                    width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(241,179,41,0.25) 0%, rgba(32,49,126,0) 65%)',
-                    pointerEvents: 'none', filter: 'blur(30px)'
-                }}></div>
-
-                <div style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '40px 30px', borderRadius: '30px',
-                    backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', width: '100%', maxWidth: '350px',
-                    boxShadow: '0 10px 40px rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.15)',
-                    display: 'flex', flexDirection: 'column', zIndex: 10
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '0 30px', width: '100%', boxSizing: 'border-box' }}>
+                <div style={{ marginTop: '20px', marginBottom: '10px', paddingLeft: '5px' }}>
+                    <img src="/mole.svg" style={{ width: '70px', height: 'auto', pointerEvents: 'none' }} alt="Mole" />
+                </div>
+                <div style={{ fontSize: '23px', fontWeight: '900', lineHeight: '1.4', marginBottom: '30px', letterSpacing: '-0.3px' }}>
+                    부여된 계정 정보로<br/>로그인하세요.
+                </div>
+                
+                <div style={{ 
+                    backgroundColor: '#EAE1DF', padding: '25px', borderRadius: '12px', 
+                    width: '100%', display: 'flex', flexDirection: 'column', gap: '15px', boxSizing: 'border-box'
                 }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-                        <div style={{ width: '64px', height: '64px', backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>
-                            <span style={{ fontSize: '32px' }}>🔒</span>
-                        </div>
-                    </div>
-
-                    <h2 style={{ textAlign: 'center', marginBottom: '25px', fontSize: '24px', fontWeight: '900', letterSpacing: '-0.5px' }}>팀 로그인</h2>
-
-                    <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                         <input
                             type="text"
-                            placeholder="팀 ID (예: team1)"
+                            placeholder="팀 번호"
                             value={username}
                             onChange={e => setUsername(e.target.value)}
-                            style={{
-                                padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.2)',
-                                color: 'black', fontSize: '16px', backgroundColor: 'rgba(255,255,255,0.9)',
-                                outline: 'none', transition: 'border 0.2s', fontWeight: '600'
+                            className="login-input"
+                            style={{ 
+                                padding: '16px 14px', borderRadius: '6px', border: '1px solid black', 
+                                color: 'black', fontSize: '18px', backgroundColor: '#EAE1DF', 
+                                outline: 'none', fontWeight: '900', WebkitAppearance: 'none'
                             }}
-                            onFocus={e => e.target.style.border = '1px solid #F1B329'}
-                            onBlur={e => e.target.style.border = '1px solid rgba(255,255,255,0.2)'}
                         />
                         <input
                             type="password"
-                            placeholder="비밀번호"
+                            placeholder="로그인 코드"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
-                            style={{
-                                padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.2)',
-                                color: 'black', fontSize: '16px', backgroundColor: 'rgba(255,255,255,0.9)',
-                                outline: 'none', transition: 'border 0.2s', fontWeight: '600'
+                            className="login-input"
+                            style={{ 
+                                padding: '16px 14px', borderRadius: '6px', border: '1px solid black', 
+                                color: 'black', fontSize: '18px', backgroundColor: '#EAE1DF', 
+                                outline: 'none', fontWeight: '900', WebkitAppearance: 'none'
                             }}
-                            onFocus={e => e.target.style.border = '1px solid #F1B329'}
-                            onBlur={e => e.target.style.border = '1px solid rgba(255,255,255,0.2)'}
                         />
-                        <button type="submit" style={{
-                            padding: '16px', borderRadius: '16px', border: 'none', backgroundColor: '#F1B329',
-                            color: 'white', fontWeight: '900', fontSize: '18px', cursor: 'pointer',
-                            marginTop: '10px', boxShadow: '0 6px 12px rgba(241, 179, 41, 0.4)', transition: 'transform 0.1s'
-                        }}
-                            onMouseDown={e => e.currentTarget.style.transform = 'scale(0.96)'}
+                        
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                            <button type="submit" style={{ 
+                                width: '56px', height: '56px', borderRadius: '50%', border: 'none', 
+                                backgroundColor: '#F1B329', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                cursor: 'pointer', transition: 'transform 0.1s', padding: 0
+                            }}
+                            onMouseDown={e => e.currentTarget.style.transform = 'scale(0.92)'}
                             onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
                             onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-                        >
-                            입장하기
-                        </button>
+                            >
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                                    <polyline points="13 5 20 12 13 19"></polyline>
+                                </svg>
+                            </button>
+                        </div>
                     </form>
-                    {error && <p style={{ color: '#ff6b6b', marginTop: '15px', textAlign: 'center', fontWeight: '800', fontSize: '15px' }}>{error}</p>}
+                    {error && <p style={{ color: '#ff6b6b', marginTop: '5px', textAlign: 'center', fontWeight: '800', fontSize: '15px' }}>{error}</p>}
                 </div>
             </div>
         </div>
