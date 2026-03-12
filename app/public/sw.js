@@ -1,7 +1,5 @@
 // Basic service worker for PWA
-const CACHE_NAME = 'jjakseon-cache-v1';
-
-self.addEventListener('install', (event) => {
+self.addEventListener('install', () => {
     // Skip waiting to activate immediately
     self.skipWaiting();
 });

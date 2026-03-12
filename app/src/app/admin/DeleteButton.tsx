@@ -2,7 +2,14 @@
 
 import { useRouter } from 'next/navigation';
 
-export default function DeleteButton({ userId, itemId, optionId, isOption }: any) {
+interface DeleteButtonProps {
+    userId: number;
+    itemId: number;
+    optionId?: string;
+    isOption: boolean;
+}
+
+export default function DeleteButton({ userId, itemId, optionId, isOption }: DeleteButtonProps) {
     const router = useRouter();
 
     const handleDelete = async () => {

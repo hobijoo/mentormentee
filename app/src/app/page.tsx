@@ -3,6 +3,7 @@ import { getSessionUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import BingoBoard from './BingoBoard';
 import { calculateLines, getLineBonus } from '@/lib/constants';
+import type { BingoUploadsMap, StoredOption, StoredUploadRow, UserDetails } from '@/lib/types';
 
 export default async function Home() {
   const user = await getSessionUser();
@@ -15,22 +16,25 @@ export default async function Home() {
   }
 
   const stmt = db.prepare('SELECT item_index, photo_url, score_awarded, options FROM uploads WHERE user_id = ?');
-  const userUploads = stmt.all(user.userId) as { item_index: number, photo_url: string, score_awarded: number, options: string }[];
+  const userUploads = stmt.all(user.userId) as StoredUploadRow[];
 
   let initialScore = 0;
-  const initialUploads: Record<number, { photoUrl: string, options: { id: string, photoUrl: string }[], scoreAwarded: number }> = {};
-  const uploadsMap: any = {};
+  const initialUploads: Record<number, { photoUrl: string, options: StoredOption[], scoreAwarded: number }> = {};
+  const uploadsMap: BingoUploadsMap = {};
 
   for (const row of userUploads) {
     initialScore += row.score_awarded || 0;
-    let opt = [];
+    let opt: StoredOption[] = [];
     try {
       const parsed = JSON.parse(row.options || '[]');
-      opt = parsed.map((o: any) => ({
-          id: typeof o === 'string' ? o : o.id,
-          photoUrl: o.photoUrl ? o.photoUrl.replace('/uploads/', '/api/file/') : ''
-      }));
-    } catch (e) { }
+      opt = (Array.isArray(parsed) ? parsed : []).map((o: unknown) => {
+        const option = typeof o === 'object' && o !== null ? o as Partial<StoredOption> : {};
+        return {
+          id: typeof o === 'string' ? o : option.id || '',
+          photoUrl: option.photoUrl ? option.photoUrl.replace('/uploads/', '/api/file/') : ''
+        };
+      }).filter(option => option.id);
+    } catch { }
 
     initialUploads[row.item_index] = {
       photoUrl: row.photo_url ? row.photo_url.replace('/uploads/', '/api/file/') : '',
@@ -41,11 +45,11 @@ export default async function Home() {
   }
 
   let lines = 0;
-  try { lines = calculateLines(uploadsMap); } catch (e) { }
+  try { lines = calculateLines(uploadsMap); } catch { }
   initialScore += getLineBonus(lines);
 
   const userStmt = db.prepare('SELECT username FROM users WHERE id = ?');
-  const userDetails = userStmt.get(user.userId) as { username: string };
+  const userDetails = userStmt.get(user.userId) as UserDetails;
 
   return (
     <BingoBoard

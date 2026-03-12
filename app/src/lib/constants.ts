@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface BingoOption {
     id: string;
     label: string;
@@ -135,7 +133,7 @@ export const BINGO_ITEMS: BingoItem[] = [
     }
 ];
 
-export function calculateLines(uploads: Record<number, any>): number {
+export function calculateLines(uploads: Record<number, unknown>): number {
     const grid = Array(16).fill(false);
     for (const key in uploads) {
         if (uploads[key]) grid[Number(key)] = true;

@@ -2,6 +2,7 @@ import db from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { BINGO_ITEMS } from '@/lib/constants';
+import type { StoredOption, StoredUploadRow } from '@/lib/types';
 
 export async function POST(req: NextRequest) {
     const user = await getSessionUser();
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
         const { userId, itemId, optionId } = body;
 
         const stmt = db.prepare('SELECT id, user_id, item_index, options FROM uploads WHERE user_id = ? AND item_index = ?');
-        const upload = stmt.get(userId, itemId) as any;
+        const upload = stmt.get(userId, itemId) as Pick<StoredUploadRow, 'id' | 'user_id' | 'item_index' | 'options'> | undefined;
 
         if (!upload) {
             return NextResponse.json({ success: false, message: 'Upload not found' });
@@ -24,15 +25,27 @@ export async function POST(req: NextRequest) {
 
         if (optionId) {
             // Delete just the option
-            let options = [];
-            try { options = JSON.parse(upload.options || '[]'); } catch (e) { }
+            let options: StoredOption[] = [];
+            try {
+                const parsed = JSON.parse(upload.options || '[]');
+                options = (Array.isArray(parsed) ? parsed : []).map((o: unknown) => {
+                    if (typeof o === 'string') {
+                        return { id: o, photoUrl: '' };
+                    }
+                    const option = typeof o === 'object' && o !== null ? o as Partial<StoredOption> : {};
+                    return {
+                        id: option.id || '',
+                        photoUrl: option.photoUrl || ''
+                    };
+                }).filter(option => option.id);
+            } catch { }
 
-            options = options.filter((o: any) => o.id !== optionId);
+            options = options.filter((o) => o.id !== optionId);
 
             // Recalculate awarded score
             let newScore = itemInfo?.score || 0;
             if (options.length > 0 && itemInfo && itemInfo.options) {
-                options.forEach((o: any) => {
+                options.forEach((o) => {
                     const optInfo = itemInfo.options!.find(io => io.id === o.id);
                     if (optInfo) {
                         newScore += optInfo.score;
@@ -49,8 +62,9 @@ export async function POST(req: NextRequest) {
         }
 
         return NextResponse.json({ success: true });
-    } catch (e: any) {
+    } catch (e: unknown) {
         console.error('Delete error:', e);
-        return NextResponse.json({ success: false, message: e.message }, { status: 500 });
+        const message = e instanceof Error ? e.message : 'Unknown error';
+        return NextResponse.json({ success: false, message }, { status: 500 });
     }
 }

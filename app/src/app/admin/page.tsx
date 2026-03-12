@@ -3,6 +3,7 @@ import { getSessionUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { BINGO_ITEMS, calculateLines, getLineBonus } from '@/lib/constants';
 import DeleteButton from './DeleteButton';
+import type { BingoUploadsMap, StoredOption, StoredUploadRow } from '@/lib/types';
 
 export default async function AdminDashboard() {
     const user = await getSessionUser();
@@ -14,13 +15,13 @@ export default async function AdminDashboard() {
     const teams = usersStmt.all() as { id: number, username: string }[];
 
     const uploadsStmt = db.prepare('SELECT user_id, item_index, photo_url, score_awarded, options FROM uploads');
-    const allUploads = uploadsStmt.all() as { user_id: number, item_index: number, photo_url: string, score_awarded: number, options: string }[];
+    const allUploads = uploadsStmt.all() as StoredUploadRow[];
 
     const teamData = teams.map(team => {
         const teamUploads = allUploads.filter(u => u.user_id === team.id);
 
         let totalScore = 0;
-        const uploadsMap: any = {};
+        const uploadsMap: BingoUploadsMap = {};
 
         teamUploads.forEach(u => {
             totalScore += u.score_awarded || 0;
@@ -59,14 +60,17 @@ export default async function AdminDashboard() {
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                 {team.uploads.map(u => {
                                     const bingoItem = BINGO_ITEMS.find(b => b.id === u.item_index);
-                                    let opts: { id: string, photoUrl: string }[] = [];
+                                    let opts: StoredOption[] = [];
                                     try {
                                         const parsed = JSON.parse(u.options || '[]');
-                                        opts = parsed.map((o: any) => ({
-                                            id: typeof o === 'string' ? o : o.id,
-                                            photoUrl: o.photoUrl ? o.photoUrl.replace('/uploads/', '/api/file/') : ''
-                                        }));
-                                    } catch (e) { }
+                                        opts = (Array.isArray(parsed) ? parsed : []).map((o: unknown) => {
+                                            const option = typeof o === 'object' && o !== null ? o as Partial<StoredOption> : {};
+                                            return {
+                                                id: typeof o === 'string' ? o : option.id || '',
+                                                photoUrl: option.photoUrl ? option.photoUrl.replace('/uploads/', '/api/file/') : ''
+                                            };
+                                        }).filter(option => option.id);
+                                    } catch { }
 
                                     const mainPhotoUrl = u.photo_url ? u.photo_url.replace('/uploads/', '/api/file/') : '';
 

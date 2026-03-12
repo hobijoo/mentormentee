@@ -5,6 +5,7 @@ import { BINGO_ITEMS, calculateLines, getLineBonus } from '@/lib/constants';
 import path from 'path';
 import fs from 'fs/promises';
 import { existsSync } from 'fs';
+import type { BingoUploadsMap, StoredOption, StoredUploadRow } from '@/lib/types';
 
 async function saveFile(file: File, userId: number, itemId: number, suffix: string) {
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
         const itemId = parseInt(formData.get('itemId') as string, 10);
         const optionsStr = formData.get('options') as string || '[]';
         let selectedOptions: string[] = [];
-        try { selectedOptions = JSON.parse(optionsStr); } catch (e) { }
+        try { selectedOptions = JSON.parse(optionsStr); } catch { }
 
         if (isNaN(itemId)) {
             return NextResponse.json({ success: false, message: 'Invalid format' }, { status: 400 });
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
 
         // Get existing row
         const stmtSelect = db.prepare('SELECT * FROM uploads WHERE user_id = ? AND item_index = ?');
-        const existingRow = stmtSelect.get(user.userId, itemId) as any;
+        const existingRow = stmtSelect.get(user.userId, itemId) as StoredUploadRow | undefined;
 
         let photoUrl = existingRow ? existingRow.photo_url : null;
         const baseFile = formData.get('file') as File | null;
@@ -56,16 +57,25 @@ export async function POST(req: Request) {
             return NextResponse.json({ success: false, message: '기본 사진이 필요합니다.' }, { status: 400 });
         }
 
-        let existingOptions: { id: string, photoUrl: string }[] = [];
+        let existingOptions: StoredOption[] = [];
         if (existingRow && existingRow.options) {
             try {
                 const parsed = JSON.parse(existingRow.options);
                 // Handle backwards compatibility if it was array of strings
-                existingOptions = parsed.map((o: any) => typeof o === 'string' ? { id: o, photoUrl: '' } : o);
-            } catch (e) { }
+                existingOptions = (Array.isArray(parsed) ? parsed : []).map((o: unknown) => {
+                    if (typeof o === 'string') {
+                        return { id: o, photoUrl: '' };
+                    }
+                    const option = typeof o === 'object' && o !== null ? o as Partial<StoredOption> : {};
+                    return {
+                        id: option.id || '',
+                        photoUrl: option.photoUrl || ''
+                    };
+                }).filter(option => option.id);
+            } catch { }
         }
 
-        let finalOptions = [...existingOptions];
+        const finalOptions = [...existingOptions];
         let totalScoreForItem = bingoItem.score;
 
         for (const optId of selectedOptions) {
@@ -105,10 +115,10 @@ export async function POST(req: Request) {
 
         // Get new total score
         const scoreStmt = db.prepare('SELECT item_index, photo_url, score_awarded, options FROM uploads WHERE user_id = ?');
-        const userUploads = scoreStmt.all(user.userId) as any[];
+        const userUploads = scoreStmt.all(user.userId) as StoredUploadRow[];
 
         let totalScore = 0;
-        const uploadsMap: any = {};
+        const uploadsMap: BingoUploadsMap = {};
         for (const row of userUploads) {
             totalScore += row.score_awarded || 0;
             uploadsMap[row.item_index] = true;

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import type { UserDetails } from '@/lib/types';
 
 function AutoFitText({ html }: { html: string }) {
     const textRef = useRef<HTMLSpanElement>(null);
@@ -52,7 +53,18 @@ export interface UploadData {
     scoreAwarded: number;
 }
 
-export default function BingoBoard({ initialScore, initialUploads, user }: any) {
+interface BingoBoardProps {
+    initialScore: number;
+    initialUploads: Record<number, UploadData>;
+    user: UserDetails;
+}
+
+interface ScoreHistoryEntry {
+    label: string;
+    score: number;
+}
+
+export default function BingoBoard({ initialScore, initialUploads, user }: BingoBoardProps) {
     const [score, setScore] = useState(initialScore);
     const [uploads, setUploads] = useState<Record<number, UploadData>>(initialUploads);
     const [isUploading, setIsUploading] = useState(false);
@@ -193,7 +205,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
     };
 
     const getScoreHistory = () => {
-        const history = [];
+        const history: ScoreHistoryEntry[] = [];
 
         for (const [idStr, uDataEntry] of Object.entries(uploads)) {
             const id = Number(idStr);
@@ -323,7 +335,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
                                 {selectedItemInfo.options.map(opt => {
                                     const isAlreadyDone = uData && uData.options.find(o => o.id === opt.id);
                                     const isChecked = selectedOptions.includes(opt.id);
-                                    let isOptionDisabled = !!isAlreadyDone;
+                                    const isOptionDisabled = !!isAlreadyDone;
 
                                     const isBowlingGroup = bowlingOptions.includes(opt.id);
 
@@ -333,7 +345,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
                                                 <input
                                                     type="checkbox"
                                                     checked={isChecked}
-                                                    onChange={(e) => toggleOption(opt.id, isBowlingGroup, bowlingOptions)}
+                                                    onChange={() => toggleOption(opt.id, isBowlingGroup, bowlingOptions)}
                                                     disabled={isOptionDisabled}
                                                 />
                                                 {opt.label} (+{opt.score}점)

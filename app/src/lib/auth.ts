@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import type { SessionUser } from './types';
 
 export const SESSION_COOKIE_NAME = 'user_session';
 
@@ -18,7 +19,7 @@ export async function getSessionUser() {
     if (!cookie) return null;
     try {
         const decoded = Buffer.from(cookie.value, 'base64').toString('ascii');
-        return JSON.parse(decoded) as { userId: number, role: string };
+        return JSON.parse(decoded) as SessionUser;
     } catch {
         return null;
     }

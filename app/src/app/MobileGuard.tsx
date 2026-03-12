@@ -7,7 +7,8 @@ export default function MobileGuard({ children }: { children: React.ReactNode })
 
     useEffect(() => {
         const checkMobile = () => {
-            const userAgent = navigator.userAgent || (window as any).opera;
+            const windowWithOpera = window as Window & { opera?: string };
+            const userAgent = navigator.userAgent || windowWithOpera.opera || '';
             // UA Check
             const isMobileDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
             // Width Check
