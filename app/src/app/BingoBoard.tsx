@@ -296,6 +296,9 @@ export default function BingoBoard({ initialScore, initialUploads, user }: any) 
                         <div style={{ width: '40px', height: '5px', backgroundColor: '#e0e0e0', borderRadius: '3px', margin: '-10px auto 10px auto' }} />
                         <h2 style={{ fontSize: '20px', fontWeight: '900', margin: 0, color: '#1B2A68' }} dangerouslySetInnerHTML={{ __html: selectedItemInfo.text.replace(/<br>/g, ' ') }} />
                         <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>기본 점수: {selectedItemInfo.score}점</p>
+                        {selectedItemInfo.description && (
+                            <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>설명: {selectedItemInfo.description}</p>
+                        )}
 
                         {!uData && (
                             <div style={{ border: '1px solid #eee', padding: '15px', borderRadius: '12px', backgroundColor: '#fdfdfd', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
