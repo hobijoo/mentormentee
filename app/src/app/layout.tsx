@@ -4,7 +4,7 @@ import MobileGuard from './MobileGuard';
 
 const siteUrl = 'https://event.ceereal.kr';
 const siteTitle = '2026 짝선짝후';
-const siteDescription = '건축학과 2026 짝선짝후 빙고를 모바일에서 간편하게 인증하고 점수를 확인해보세요.';
+const siteDescription = '2026 건설환경도시공학부 짝선짝후 빙고 공식 웹페이지';
 const previewImage = '/top.png';
 
 export const metadata: Metadata = {
