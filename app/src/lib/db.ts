@@ -9,6 +9,19 @@ if (!fs.existsSync(dbDir)) {
 }
 const db = new Database(dbPath);
 
+const defaultTeamCredentials = [
+    ['team1', '483271'],
+    ['team2', '915604'],
+    ['team3', '260843'],
+    ['team4', '774129'],
+    ['team5', '538916'],
+    ['team6', '142785'],
+    ['team7', '689352'],
+    ['team8', '327418'],
+    ['team9', '851960'],
+    ['team10', '406237'],
+] as const;
+
 // Initialize DB schema
 db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -36,8 +49,8 @@ const { count } = stmt.get() as { count: number };
 if (count === 0) {
     const insert = db.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)');
     insert.run('admin', 'admin1234', 'admin');
-    for (let i = 1; i <= 20; i++) {
-        insert.run(`team${i}`, `1234`, 'user');
+    for (const [username, password] of defaultTeamCredentials) {
+        insert.run(username, password, 'user');
     }
 }
 
