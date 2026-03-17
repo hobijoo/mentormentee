@@ -4,8 +4,8 @@
   "description": "건축학과 2026학년도 짝선짝후 빙고 앱",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#20317E",
-  "theme_color": "#20317E",
+  "background_color": "#EEE9E7",
+  "theme_color": "#EEE9E7",
   "icons": [
     {
       "src": "/icon-192x192.png",

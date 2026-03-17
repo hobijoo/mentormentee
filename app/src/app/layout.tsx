@@ -66,7 +66,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-icon.png" />
         <link href="https://cdn.jsdelivr.net/gh/sun-typeface/SUITE@2/fonts/static/woff2/SUITE.css" rel="stylesheet" />
       </head>
-      <body style={{ backgroundColor: '#20317E', margin: 0, padding: 0, display: 'flex', justifyContent: 'center', minHeight: '100dvh', fontWeight: 700 }}>
+      <body style={{ backgroundColor: '#EEE9E7', margin: 0, padding: 0, display: 'flex', justifyContent: 'center', minHeight: '100dvh', fontWeight: 700 }}>
         <MobileGuard>
           {children}
         </MobileGuard>
