@@ -295,7 +295,8 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
     const bowlingOptions = ['볼링핀3', '볼링핀4', '볼링핀5'];
 
     return (
-        <div style={{ position: 'fixed', top: 0, width: '100%', maxWidth: '430px', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', touchAction: 'none' }}>
+        <div style={{ position: 'fixed', inset: 0, width: '100%', maxWidth: '430px', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', touchAction: 'none', backgroundColor: '#EEE9E7' }}>
+            <div className="safeTopInset" />
             <div id="header" style={{ width: '100%', flexShrink: 0 }}>
                 <img src="/top.png" alt="Header Banner" style={{ width: '100%', height: 'auto', display: 'block', transform: 'translateZ(0)' }} />
             </div>

@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap');
 
+html {
+    background-color: #EEE9E7;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -48,6 +52,17 @@ input[type="checkbox"] {
     font-family: "Holtwood One SC", serif;
     font-weight: 400;
     font-style: normal;
+}
+
+.safeTopInset {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top);
+    background: #EEE9E7;
+    z-index: 1;
+    pointer-events: none;
 }
 
 #header {

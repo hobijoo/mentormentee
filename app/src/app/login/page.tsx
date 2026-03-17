@@ -29,13 +29,15 @@ export default function Login() {
     };
 
     return (
-        <div style={{ position: 'fixed', top: 0, display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '430px', margin: '0 auto', height: '100dvh', backgroundColor: '#20317E', color: 'white', overflow: 'hidden', touchAction: 'none' }}>
+        <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '430px', margin: '0 auto', height: '100dvh', backgroundColor: '#EEE9E7', color: 'white', overflow: 'hidden', touchAction: 'none' }}>
             <style>{`
                 .login-input::placeholder {
                     color: black;
                     opacity: 1;
                 }
             `}</style>
+            <div className="safeTopInset" />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: '#20317E', minHeight: 0 }}>
             <div id="header" style={{ width: '100%', flexShrink: 0 }}>
                 <img src="/top.png" alt="Header Logo" style={{ width: '100%', height: 'auto', display: 'block', transform: 'translateZ(0)', pointerEvents: 'none' }} />
             </div>
@@ -97,6 +99,7 @@ export default function Login() {
                     </form>
                     {error && <p style={{ color: '#ff6b6b', marginTop: '5px', textAlign: 'center', fontWeight: '800', fontSize: '15px' }}>{error}</p>}
                 </div>
+            </div>
             </div>
         </div>
     );

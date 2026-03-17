@@ -51,6 +51,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: 'cover',
   themeColor: '#EEE9E7'
 };
 
@@ -65,6 +66,8 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/apple-icon.png" />
         <link href="https://cdn.jsdelivr.net/gh/sun-typeface/SUITE@2/fonts/static/woff2/SUITE.css" rel="stylesheet" />
+        <meta name="theme-color" content="#EEE9E7" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body style={{ backgroundColor: '#EEE9E7', margin: 0, padding: 0, display: 'flex', justifyContent: 'center', minHeight: '100dvh', fontWeight: 700 }}>
         <MobileGuard>
