@@ -21,4 +21,14 @@ export interface StoredUploadRow {
     options: string;
 }
 
+export interface DeletionNoticeRow {
+    id: number;
+    user_id: number;
+    item_index: number;
+    option_id: string | null;
+    reason: string;
+    created_at: string;
+    read_at: string | null;
+}
+
 export type BingoUploadsMap = Record<number, boolean>;

@@ -12,7 +12,11 @@ export async function POST(req: NextRequest) {
 
     try {
         const body = await req.json();
-        const { userId, itemId, optionId } = body;
+        const { userId, itemId, optionId, reason } = body;
+
+        if (typeof reason !== 'string' || !reason.trim()) {
+            return NextResponse.json({ success: false, message: '삭제 사유를 입력해주세요.' }, { status: 400 });
+        }
 
         const stmt = db.prepare('SELECT id, user_id, item_index, options FROM uploads WHERE user_id = ? AND item_index = ?');
         const upload = stmt.get(userId, itemId) as Pick<StoredUploadRow, 'id' | 'user_id' | 'item_index' | 'options'> | undefined;
@@ -60,6 +64,11 @@ export async function POST(req: NextRequest) {
             // Delete entire base mission
             db.prepare('DELETE FROM uploads WHERE id = ?').run(upload.id);
         }
+
+        db.prepare(`
+            INSERT INTO deletion_notices (user_id, item_index, option_id, reason)
+            VALUES (?, ?, ?, ?)
+        `).run(userId, itemId, optionId || null, reason.trim());
 
         return NextResponse.json({ success: true });
     } catch (e: unknown) {

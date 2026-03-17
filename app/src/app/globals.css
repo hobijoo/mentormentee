@@ -17,7 +17,6 @@ textarea {
     font-weight: 700;
 }
 
-/* Custom file input style */
 input[type="file"]::file-selector-button {
     font-family: 'SUITE', sans-serif;
     font-weight: bold;
@@ -32,6 +31,10 @@ input[type="file"]::file-selector-button {
 
 input[type="file"]::file-selector-button:hover {
     background-color: #e3a521;
+}
+
+input[type="checkbox"] {
+    accent-color: #20317E;
 }
 
 @font-face {
@@ -125,6 +128,409 @@ img {
     justify-content: center;
     text-align: center;
     flex-direction: column;
+}
+
+.retroHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.retroHeader.isCompact {
+    max-width: 520px;
+}
+
+.retroHeaderTopBar {
+    min-height: 34px;
+    padding: 0 18px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    background: #213989;
+    color: #f4efe6;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.retroHeaderPanel {
+    padding: 18px 20px 20px;
+    border-radius: 24px;
+    border: 4px solid #213989;
+    background: #f4efe6;
+    box-shadow: 0 8px 0 rgba(33, 57, 137, 0.18);
+}
+
+.retroHeaderTitleEn {
+    color: #213989;
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+}
+
+.retroHeaderTitle {
+    margin-top: 8px;
+    color: #213989;
+    font-family: 'Paperozi';
+    font-size: 40px;
+    line-height: 0.95;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+}
+
+.retroHeaderSubtitle {
+    margin-top: 10px;
+    color: rgba(33, 57, 137, 0.8);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.retroHeaderBands {
+    height: 20px;
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, #213989 0 34%, #356da5 34% 56%, #2da9c1 56% 76%, #62d0d8 76% 100%);
+}
+
+.sheetOverlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 1000;
+    box-sizing: border-box;
+    backdrop-filter: blur(2px);
+}
+
+.sheetPanel {
+    touch-action: pan-y;
+    background: #fff;
+    padding: 24px 20px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 90dvh;
+    overflow-y: auto;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sheetHandle {
+    width: 40px;
+    height: 5px;
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    margin: -10px auto 10px auto;
+}
+
+.sheetTitleRow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sheetTitle {
+    font-size: 20px;
+    font-weight: 900;
+    margin: 0;
+    color: #1B2A68;
+    line-height: 1.3;
+    flex: 1;
+    min-width: 0;
+}
+
+.sheetScorePill {
+    flex-shrink: 0;
+    min-height: 34px;
+    padding: 0 14px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #20317E;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.sheetScorePillTotal {
+    background: #F1B329;
+    color: #1B2A68;
+}
+
+.sheetInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sheetMuted {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.sheetCard {
+    border: 1px solid #eee;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background-color: #fdfdfd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+}
+
+.sheetCardHeaderRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.sheetCardTitle {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    color: #333;
+    line-height: 1.2;
+}
+
+.sheetDoneBox {
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    border-radius: 12px;
+    background-color: #f0f4f8;
+    color: #20317E;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.sheetOptionGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #fafafa;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+.sheetOptionTitle {
+    color: #F1B329;
+}
+
+.sheetOptionItem {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.sheetOptionItem:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.sheetOptionLabel {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: black;
+}
+
+.sheetOptionLabel.isDisabled {
+    color: #aaa;
+}
+
+.sheetOptionFile {
+    width: 100%;
+    margin-left: 20px;
+}
+
+.sheetDangerButton,
+.sheetInlineDangerButton {
+    border: none;
+    border-radius: 999px;
+    background: #ffe5e5;
+    color: #b02a2a;
+    font-size: 13px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.sheetDangerButton {
+    min-height: 34px;
+    padding: 0 14px;
+}
+
+.sheetInlineDangerButton {
+    width: fit-content;
+    min-height: 30px;
+    padding: 0 12px;
+    margin-left: 24px;
+}
+
+.filePicker {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    width: auto;
+    min-width: 0;
+}
+
+.filePickerInput {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.filePickerButton {
+    width: fit-content;
+    min-height: 42px;
+    padding: 0 14px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #20317E;
+    border: 2px solid #20317E;
+    color: white;
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.filePickerButton svg {
+    flex-shrink: 0;
+}
+
+.filePickerName {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #667090;
+    word-break: break-all;
+    text-align: right;
+}
+
+.sheetActions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-bottom: 10px;
+}
+
+.sheetPrimaryButton,
+.sheetSecondaryButton {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: 16px;
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.sheetPrimaryButton {
+    background-color: #20317E;
+    color: white;
+    opacity: 1;
+}
+
+.sheetPrimaryButton:disabled {
+    opacity: 0.5;
+}
+
+.sheetSecondaryButton {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.historyList {
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.historyRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 4px;
+    gap: 12px;
+}
+
+.historyMain {
+    color: black;
+}
+
+.historySub {
+    color: #666;
+}
+
+.historyScore {
+    font-weight: bold;
+    color: #20317E;
+    white-space: nowrap;
+}
+
+.historyEmpty {
+    text-align: center;
+    color: #888;
+}
+
+.historySummary {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    border-top: 2px dashed #ccc;
+    padding-top: 15px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #1B2A68;
+}
+
+.historyTotal {
+    color: #F1B329;
+}
+
+@media (max-width: 380px) {
+    .sheetScorePill {
+        min-height: 32px;
+        padding: 0 12px;
+        font-size: 13px;
+    }
 }
 
 @keyframes slideUp {

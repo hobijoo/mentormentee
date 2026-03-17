@@ -41,6 +41,15 @@ db.exec(`
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         UNIQUE(user_id, item_index)
     );
+    CREATE TABLE IF NOT EXISTS deletion_notices (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        item_index INTEGER NOT NULL,
+        option_id TEXT,
+        reason TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        read_at DATETIME
+    );
 `);
 
 // Insert default users if not exists
