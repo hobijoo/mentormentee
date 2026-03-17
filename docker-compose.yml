@@ -20,4 +20,8 @@ services:
 
 volumes:
   jjakseon-db:
+    # Pin the existing HAOS volume name so redeploys keep the current database.
+    name: mentormentee_jjakseon-db
   jjakseon-uploads:
+    # Reuse the existing uploads volume created by the current stack.
+    name: mentormentee_jjakseon-uploads
