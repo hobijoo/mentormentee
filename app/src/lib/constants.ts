@@ -45,7 +45,7 @@ export const BINGO_ITEMS: BingoItem[] = [
         id: 3,
         text: '노래방 or<br>방탈출',
         score: 100,
-        description: '팀원 전원이 모여서 노래방이나 방탈출카페 가서 활동하고 인증샷 남기기',
+        description: '팀원 6명 이상이 모여서 노래방이나 방탈출카페 가서 활동하고 인증샷 남기기',
         options: [
             { id: '둘다', label: '둘 다 함', score: 100 },
             { id: '듀엣곡', label: '선배 후배 듀엣곡', score: 200 },
@@ -56,7 +56,7 @@ export const BINGO_ITEMS: BingoItem[] = [
         id: 4,
         text: '보겜카<br>가기',
         score: 70,
-        description: '팀원 전원이 모여서 보드게임 카페에서 게임하고, 인증샷 남기기'
+        description: '팀원 6명 이상이 모여서 보드게임 카페에서 게임하고, 인증샷 남기기'
     },
     {
         id: 5,
@@ -99,13 +99,13 @@ export const BINGO_ITEMS: BingoItem[] = [
         id: 10,
         text: '네컷 찍고<br>과방 게시',
         score: 50,
-        description: '팀원 전원이 모여서 인생네컷 찍고 과방에 있는 인생네컷 게시판에 붙이고 인증샷 남기기'
+        description: '팀원 6명 이상이 모여서 인생네컷 찍고 과방에 있는 인생네컷 게시판에 붙이고 인증샷 남기기'
     },
     {
         id: 11,
         text: '밥약&<br>보은',
         score: 150,
-        description: '팀원 전원이 모여서 밥약하고, 밥약 보은까지 둘 다 하고 인증샷 남기기'
+        description: '팀원 6명 이상이 모여서 밥약하고, 밥약 보은까지 둘 다 하고 인증샷 남기기'
     },
     {
         id: 12,
@@ -129,7 +129,7 @@ export const BINGO_ITEMS: BingoItem[] = [
         id: 15,
         text: '302동<br>가기',
         score: 150,
-        description: '팀원 전원이 모여서 남산타워 또는 63빌딩이 보이게 사진 찍고 인증샷 남기기'
+        description: '팀원 6명 이상이 모여서 남산타워 또는 63빌딩이 보이게 사진 찍고 인증샷 남기기'
     }
 ];
 
