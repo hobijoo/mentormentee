@@ -228,6 +228,11 @@ img {
     z-index: 1000;
     box-sizing: border-box;
     backdrop-filter: blur(2px);
+    animation: sheetOverlayFadeIn 0.24s ease-out;
+}
+
+.sheetOverlay.isClosing {
+    animation: sheetOverlayFadeOut 0.24s ease forwards;
 }
 
 .sheetPanel {
@@ -247,12 +252,22 @@ img {
     animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.sheetPanel.isClosing {
+    animation: slideDown 0.24s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
 .sheetHandle {
     width: 40px;
     height: 5px;
     background-color: #e0e0e0;
     border-radius: 3px;
     margin: -10px auto 10px auto;
+    cursor: grab;
+    touch-action: none;
+}
+
+.sheetHandle:active {
+    cursor: grabbing;
 }
 
 .sheetTitleRow {
@@ -360,7 +375,7 @@ img {
 .sheetOptionItem {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
     padding-bottom: 10px;
     border-bottom: 1px solid #ddd;
 }
@@ -370,15 +385,42 @@ img {
     padding-bottom: 0;
 }
 
+.sheetOptionRow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
 .sheetOptionLabel {
     display: flex;
     align-items: center;
     gap: 5px;
     color: black;
+    flex: 1;
+    min-width: 0;
+}
+
+.sheetOptionText {
+    line-height: 1.35;
 }
 
 .sheetOptionLabel.isDisabled {
     color: #aaa;
+}
+
+.sheetOptionPill {
+    flex-shrink: 0;
+    min-height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #20317E;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 900;
 }
 
 .sheetOptionFile {
@@ -556,5 +598,35 @@ img {
 
     to {
         transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes sheetOverlayFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes sheetOverlayFadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
     }
 }

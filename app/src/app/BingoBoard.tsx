@@ -92,6 +92,9 @@ interface ScoreHistoryEntry {
     score: number;
 }
 
+const SHEET_CLOSE_DURATION = 240;
+const SHEET_CLOSE_THRESHOLD = 120;
+
 export default function BingoBoard({ initialScore, initialUploads, user }: BingoBoardProps) {
     const [score, setScore] = useState(initialScore);
     const [uploads, setUploads] = useState<Record<number, UploadData>>(initialUploads);
@@ -105,17 +108,114 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
 
     const [showHistory, setShowHistory] = useState(false);
     const [showBingoAnimation, setShowBingoAnimation] = useState<number>(0);
+    const [closingSheet, setClosingSheet] = useState<'item' | 'history' | null>(null);
+    const [dragSheet, setDragSheet] = useState<'item' | 'history' | null>(null);
+    const [sheetOffsetY, setSheetOffsetY] = useState(0);
+    const dragStartYRef = useRef(0);
+    const closeTimeoutRef = useRef<number | null>(null);
 
     const uData = selectedItemId !== null ? uploads[selectedItemId] : null;
 
     const handleItemClick = (id: number) => {
         const existingData = uploads[id];
 
+        if (closeTimeoutRef.current) {
+            window.clearTimeout(closeTimeoutRef.current);
+            closeTimeoutRef.current = null;
+        }
+        setClosingSheet(null);
+        setDragSheet(null);
+        setSheetOffsetY(0);
         setSelectedItemId(id);
         setSelectedFile(null);
         setSelectedOptions(existingData ? existingData.options.map((option) => option.id) : []);
         setOptionFiles({});
     };
+
+    const openHistorySheet = () => {
+        if (closeTimeoutRef.current) {
+            window.clearTimeout(closeTimeoutRef.current);
+            closeTimeoutRef.current = null;
+        }
+        setClosingSheet(null);
+        setDragSheet(null);
+        setSheetOffsetY(0);
+        setShowHistory(true);
+    };
+
+    const finishCloseSheet = (sheet: 'item' | 'history') => {
+        if (sheet === 'item') {
+            setSelectedItemId(null);
+        } else {
+            setShowHistory(false);
+        }
+        setClosingSheet(null);
+        setDragSheet(null);
+        setSheetOffsetY(0);
+    };
+
+    const requestCloseSheet = (sheet: 'item' | 'history') => {
+        if (closingSheet === sheet) return;
+        setClosingSheet(sheet);
+        setDragSheet(null);
+        setSheetOffsetY(0);
+
+        if (closeTimeoutRef.current) {
+            window.clearTimeout(closeTimeoutRef.current);
+        }
+
+        closeTimeoutRef.current = window.setTimeout(() => {
+            finishCloseSheet(sheet);
+            closeTimeoutRef.current = null;
+        }, SHEET_CLOSE_DURATION);
+    };
+
+    const beginSheetDrag = (sheet: 'item' | 'history', clientY: number) => {
+        if (closingSheet) return;
+        setDragSheet(sheet);
+        dragStartYRef.current = clientY - sheetOffsetY;
+    };
+
+    useEffect(() => {
+        return () => {
+            if (closeTimeoutRef.current) {
+                window.clearTimeout(closeTimeoutRef.current);
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!dragSheet) return;
+
+        const handlePointerMove = (event: PointerEvent) => {
+            const nextOffset = Math.max(0, event.clientY - dragStartYRef.current);
+            setSheetOffsetY(nextOffset);
+        };
+
+        const handlePointerEnd = () => {
+            const activeSheet = dragSheet;
+            const shouldClose = sheetOffsetY > SHEET_CLOSE_THRESHOLD;
+
+            setDragSheet(null);
+
+            if (shouldClose) {
+                requestCloseSheet(activeSheet);
+                return;
+            }
+
+            setSheetOffsetY(0);
+        };
+
+        window.addEventListener('pointermove', handlePointerMove);
+        window.addEventListener('pointerup', handlePointerEnd);
+        window.addEventListener('pointercancel', handlePointerEnd);
+
+        return () => {
+            window.removeEventListener('pointermove', handlePointerMove);
+            window.removeEventListener('pointerup', handlePointerEnd);
+            window.removeEventListener('pointercancel', handlePointerEnd);
+        };
+    }, [dragSheet, sheetOffsetY, closingSheet]);
 
     const toggleOption = (optId: string, isMutuallyExclusiveGroup: boolean = false, groupOptIds: string[] = []) => {
         setSelectedOptions((prev) => {
@@ -209,7 +309,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
 
                 setUploads(nextUploads);
                 setScore(data.newScore);
-                setSelectedItemId(null);
+                requestCloseSheet('item');
             } else {
                 alert('업로드 실패: ' + data.message);
             }
@@ -249,10 +349,10 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
                 setSelectedOptions(nextUpload ? nextUpload.options.map((option: OptionData) => option.id) : []);
                 setOptionFiles({});
                 if (!nextUpload) {
-                    setSelectedItemId(null);
+                    requestCloseSheet('item');
                 }
             } else {
-                setSelectedItemId(null);
+                requestCloseSheet('item');
             }
         } catch (error) {
             console.error('Delete error', error);
@@ -293,6 +393,26 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
 
     const selectedItemInfo = BINGO_ITEMS.find((item) => item.id === selectedItemId);
     const bowlingOptions = ['볼링핀3', '볼링핀4', '볼링핀5'];
+    const itemSheetClosing = closingSheet === 'item';
+    const historySheetClosing = closingSheet === 'history';
+
+    const getSheetOverlayStyle = (sheet: 'item' | 'history') => {
+        if (dragSheet !== sheet && sheetOffsetY === 0) return undefined;
+
+        return {
+            opacity: Math.max(0, 1 - sheetOffsetY / 260),
+            transition: dragSheet === sheet ? 'none' : 'opacity 0.18s ease'
+        };
+    };
+
+    const getSheetPanelStyle = (sheet: 'item' | 'history') => {
+        if (dragSheet !== sheet && sheetOffsetY === 0) return undefined;
+
+        return {
+            transform: `translateY(${sheetOffsetY}px)`,
+            transition: dragSheet === sheet ? 'none' as const : 'transform 0.18s ease'
+        };
+    };
 
     return (
         <div style={{ position: 'fixed', inset: 0, width: '100%', maxWidth: '430px', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', touchAction: 'none', backgroundColor: '#EEE9E7' }}>
@@ -306,7 +426,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
                     <div
                         id="bingoScore"
                         className="holtwood-one-sc-regular"
-                        onClick={() => setShowHistory(true)}
+                        onClick={openHistorySheet}
                         style={{ cursor: 'pointer' }}
                     >
                         {score}
@@ -357,9 +477,18 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
             </div>
 
             {selectedItemId !== null && selectedItemInfo && (
-                <div className="sheetOverlay" onClick={(e) => { if (e.target === e.currentTarget) setSelectedItemId(null); }}>
-                    <div className="sheetPanel">
-                        <div className="sheetHandle" />
+                <div
+                    className={`sheetOverlay ${itemSheetClosing ? 'isClosing' : ''}`}
+                    style={getSheetOverlayStyle('item')}
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) requestCloseSheet('item');
+                    }}
+                >
+                    <div className={`sheetPanel ${itemSheetClosing ? 'isClosing' : ''}`} style={getSheetPanelStyle('item')}>
+                        <div
+                            className="sheetHandle"
+                            onPointerDown={(e) => beginSheetDrag('item', e.clientY)}
+                        />
                         <div className="sheetTitleRow">
                             <h2 className="sheetTitle" dangerouslySetInnerHTML={{ __html: selectedItemInfo.text.replace(/<br>/g, ' ') }} />
                             <div className="sheetScorePill">+{selectedItemInfo.score}</div>
@@ -403,16 +532,21 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
 
                                     return (
                                         <div key={option.id} className="sheetOptionItem">
-                                            <label className={`sheetOptionLabel ${isOptionDisabled ? 'isDisabled' : ''}`}>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={isChecked}
-                                                    onChange={() => toggleOption(option.id, isBowlingGroup, bowlingOptions)}
-                                                    disabled={isOptionDisabled}
-                                                />
-                                                {option.label} (+{option.score}점)
-                                                {isAlreadyDone && ' ✓'}
-                                            </label>
+                                            <div className="sheetOptionRow">
+                                                <label className={`sheetOptionLabel ${isOptionDisabled ? 'isDisabled' : ''}`}>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={isChecked}
+                                                        onChange={() => toggleOption(option.id, isBowlingGroup, bowlingOptions)}
+                                                        disabled={isOptionDisabled}
+                                                    />
+                                                    <span className="sheetOptionText">
+                                                        {option.label}
+                                                        {isAlreadyDone && ' ✓'}
+                                                    </span>
+                                                </label>
+                                                <div className="sheetOptionPill">+{option.score}</div>
+                                            </div>
 
                                             {isChecked && !isAlreadyDone && (
                                                 <div className="sheetOptionFile">
@@ -448,7 +582,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
                                 {isUploading ? '업로드 중...' : '확인'}
                             </button>
                             <button
-                                onClick={() => setSelectedItemId(null)}
+                                onClick={() => requestCloseSheet('item')}
                                 className="sheetSecondaryButton"
                             >
                                 취소
@@ -459,9 +593,18 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
             )}
 
             {showHistory && (
-                <div className="sheetOverlay" onClick={(e) => { if (e.target === e.currentTarget) setShowHistory(false); }}>
-                    <div className="sheetPanel">
-                        <div className="sheetHandle" />
+                <div
+                    className={`sheetOverlay ${historySheetClosing ? 'isClosing' : ''}`}
+                    style={getSheetOverlayStyle('history')}
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) requestCloseSheet('history');
+                    }}
+                >
+                    <div className={`sheetPanel ${historySheetClosing ? 'isClosing' : ''}`} style={getSheetPanelStyle('history')}>
+                        <div
+                            className="sheetHandle"
+                            onPointerDown={(e) => beginSheetDrag('history', e.clientY)}
+                        />
                         <div className="sheetTitleRow">
                             <h2 className="sheetTitle">점수 내역</h2>
                             <div className="sheetScorePill sheetScorePillTotal">{score}점</div>
@@ -489,7 +632,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
                         </div>
 
                         <button
-                            onClick={() => setShowHistory(false)}
+                            onClick={() => requestCloseSheet('history')}
                             className="sheetPrimaryButton"
                         >
                             닫기

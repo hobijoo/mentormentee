@@ -31,8 +31,8 @@ export const BINGO_ITEMS: BingoItem[] = [
         options: [
             { id: '의리주', label: '의리주 병샷 인증', score: 100 },
             { id: '볼링핀3', label: '볼링핀 3줄 세우기', score: 100 },
-            { id: '볼링핀4', label: '볼링핀 4줄 세우기 (+200)', score: 300 },
-            { id: '볼링핀5', label: '볼링핀 5줄 세우기 (+200)', score: 500 }
+            { id: '볼링핀4', label: '볼링핀 4줄 세우기', score: 300 },
+            { id: '볼링핀5', label: '볼링핀 5줄 세우기', score: 500 }
         ]
     },
     {
