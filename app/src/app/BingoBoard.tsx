@@ -70,6 +70,8 @@ function FilePicker({
     );
 }
 
+const BOWLING_OPTION_IDS = ['볼링핀3', '볼링핀4', '볼링핀5'];
+
 export interface OptionData {
     id: string;
     photoUrl: string;
@@ -436,7 +438,15 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
                     {BINGO_ITEMS.map((item) => {
                         const existingData = uploads[item.id];
                         const hasPhoto = !!existingData;
-                        const isMaxed = existingData && (!item.options || existingData.options.length >= item.options.length);
+                        const hasBowlingBonus = item.id === 1 && !!existingData?.options.some((option) => BOWLING_OPTION_IDS.includes(option.id));
+                        const hasDrinkBonus = item.id === 1 && !!existingData?.options.some((option) => option.id === '의리주');
+                        const hasRemainingBonus =
+                            !!existingData &&
+                            !!item.options &&
+                            (item.id === 1
+                                ? (!hasDrinkBonus || !hasBowlingBonus)
+                                : existingData.options.length < item.options.length);
+                        const isMaxed = !!existingData && !hasRemainingBonus;
 
                         return (
                             <div
@@ -444,7 +454,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
                                 className="bingoBoardItem"
                                 onClick={() => handleItemClick(item.id)}
                                 style={{
-                                    cursor: isMaxed ? 'default' : 'pointer',
+                                    cursor: 'pointer',
                                     backgroundImage: hasPhoto ? `url(${existingData.photoUrl})` : 'none',
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
@@ -453,7 +463,7 @@ export default function BingoBoard({ initialScore, initialUploads, user }: Bingo
                                 }}
                             >
                                 {!hasPhoto && <AutoFitText html={item.text} />}
-                                {hasPhoto && !isMaxed && (
+                                {hasPhoto && hasRemainingBonus && (
                                     <div style={{ backgroundColor: 'rgba(255,255,255,0.8)', padding: '2px 5px', borderRadius: '5px', fontSize: '12px', color: 'black', fontWeight: 'bold' }}>
                                         보너스 추가 가능!
                                     </div>

@@ -7,6 +7,8 @@ import fs from 'fs/promises';
 import { existsSync } from 'fs';
 import type { BingoUploadsMap, StoredOption, StoredUploadRow } from '@/lib/types';
 
+const BOWLING_OPTION_IDS = ['볼링핀3', '볼링핀4', '볼링핀5'];
+
 async function saveFile(file: File, userId: number, itemId: number, suffix: string) {
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
     if (!existsSync(uploadsDir)) {
@@ -75,8 +77,15 @@ export async function POST(req: Request) {
             } catch { }
         }
 
-        const finalOptions = [...existingOptions];
+        let finalOptions = [...existingOptions];
         let totalScoreForItem = bingoItem.score;
+
+        if (itemId === 1) {
+            const selectedBowlingOption = selectedOptions.find((optId) => BOWLING_OPTION_IDS.includes(optId));
+            if (selectedBowlingOption) {
+                finalOptions = finalOptions.filter((option) => !BOWLING_OPTION_IDS.includes(option.id));
+            }
+        }
 
         for (const optId of selectedOptions) {
             const alreadyExists = finalOptions.find(o => o.id === optId);
